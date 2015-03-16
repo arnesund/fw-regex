@@ -24,7 +24,7 @@ reConn.append(dict(regex=r'Built (?P<direction>outbound|inbound) (?P<protocol>[a
     fields=dict(direction=0, protocol=1, interface_in=2, src=3, sport=4, interface_out=5, dst=6, dport=7)))
 
 # Fortinet FortiGate CSV format
-reConn.append(dict(regex=r'type=traffic,subtype=forward,.*,srcip=(?P<src>[0-9.]+),srcport=(?P<sport>[0-9]+),srcintf="(?P<interface_in>[a-zA-Z0-9_-]+)",dstip=(?P<dst>[0-9.]+),dstport=(?P<dport>[0-9]+),dstintf="(?P<interface_out>[a-zA-Z0-9_-]+)",.*,proto=(?P<protocol>[0-9]+)', \
+reConn.append(dict(regex=r'date=(?P<date>[0-9-]+).*type=traffic,subtype=forward,.*,srcip=(?P<src>[0-9.]+),srcport=(?P<sport>[0-9]+),srcintf="(?P<interface_in>[a-zA-Z0-9_-]+)",dstip=(?P<dst>[0-9.]+),dstport=(?P<dport>[0-9]+),dstintf="(?P<interface_out>[a-zA-Z0-9_-]+)",.*,proto=(?P<protocol>[0-9]+)', \
     fields=dict(direction=None, src=0, sport=1, interface_in=2, dst=3, dport=4, interface_out=5, protocol=6)))
 
 # Compile each regex
