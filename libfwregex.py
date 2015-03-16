@@ -9,7 +9,7 @@ import time
 import datetime
 
 # Debug flag
-DEBUG = True
+DEBUG = False
 
 # Different timestamp formats used
 reTime = []
