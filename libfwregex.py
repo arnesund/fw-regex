@@ -13,8 +13,8 @@ DEBUG = True
 
 # Different timestamp formats used
 reTime = []
-reTime.append(dict(regex=r'[a-zA-Z]+ [0-9 ]?[0-9] (?P<time>[0-9:]+) (?P<month>[a-zA-Z]+) (?P<day>[0-9]+) (?P<year>[0-9]+)', fields=dict(time=0, year=3, month=1, day=2)))
-reTime.append(dict(regex=r'(?P<month>[a-zA-Z]+) (?P<day>[0-9 ]?[0-9]) (?P<time>[0-9:]+)', fields=dict(year=None, month=0, day=1, time=2)))
+reTime.append(dict(regex=r'[a-zA-Z]+\s+[0-9]+ (?P<time>[0-9:]+) (?P<month>[a-zA-Z]+) (?P<day>[0-9]+) (?P<year>[0-9]+)', fields=dict(time=0, year=3, month=1, day=2)))
+reTime.append(dict(regex=r'(?P<month>[a-zA-Z]+)\s+(?P<day>[0-9]+) (?P<time>[0-9:]+)', fields=dict(year=None, month=0, day=1, time=2)))
 
 # Regular expressions for info in built connection message
 reConn = []
