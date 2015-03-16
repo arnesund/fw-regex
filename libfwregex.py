@@ -62,18 +62,11 @@ def get_builtconn(line):
             continue
         else:
             # Match found, first process timestamp
-            for ret in reTime:
-                matchtime = re.search(ret['regex'], line)
-                if matchtime:
-                    # Save time-related data
-                    data.update(matchtime.groupdict())
-
-                    # Stop loop since time format match was found
-                    break
+            timedata = get_timestamp(line)
+            if timedata:
+                # Save time-related data
+                data.update(timedata)
             else:
-                if DEBUG:
-                    print('ERROR: Unable to decode time format of line: {0}'.format(line))
-
                 # Unable to decode timestamp
                 return None
 
