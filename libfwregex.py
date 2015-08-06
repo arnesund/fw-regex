@@ -27,9 +27,13 @@ reConn = []
 reConn.append(dict(regex=r'Built (?P<direction>outbound|inbound) (?P<protocol>[a-zA-Z]+) .* for (?P<interface_in>[a-zA-Z0-9_-]+):(?P<src>[0-9.]+)/(?P<sport>[0-9]+) .* to (?P<interface_out>[a-zA-Z0-9_-]+):(?P<dst>[0-9.]+)/(?P<dport>[0-9]+)', \
     fields=dict(direction=0, protocol=1, interface_in=2, src=3, sport=4, interface_out=5, dst=6, dport=7)))
 
-# Fortinet FortiGate CSV format
-reConn.append(dict(regex=r'date=(?P<date>[0-9-]+).*type=traffic,subtype=forward,.*,srcip=(?P<src>[0-9.]+),srcport=(?P<sport>[0-9]+),srcintf="(?P<interface_in>[a-zA-Z0-9_-]+)",dstip=(?P<dst>[0-9.]+),dstport=(?P<dport>[0-9]+),dstintf="(?P<interface_out>[a-zA-Z0-9_-]+)",.*,proto=(?P<protocol>[0-9]+)', \
+# Fortinet FortiGate CSV format for TCP/UDP connections
+reConn.append(dict(regex=r'.*type=traffic,subtype=forward,.*,srcip=(?P<src>[0-9.]+),srcport=(?P<sport>[0-9]+),srcintf="(?P<interface_in>[a-zA-Z0-9_-]+)",dstip=(?P<dst>[0-9.]+),dstport=(?P<dport>[0-9]+),dstintf="(?P<interface_out>[a-zA-Z0-9_-]+)".*,proto=(?P<protocol>[0-9]+)',
     fields=dict(direction=None, src=0, sport=1, interface_in=2, dst=3, dport=4, interface_out=5, protocol=6)))
+
+# Fortinet FortiGate CSV format for ICMP traffic
+reConn.append(dict(regex=r'.*type=traffic,subtype=forward,.*,srcip=(?P<src>[0-9.]+),srcintf="(?P<interface_in>[a-zA-Z0-9_-]+)",dstip=(?P<dst>[0-9.]+),dstintf="(?P<interface_out>[a-zA-Z0-9_-]+)",.*,proto=(?P<protocol>[0-9]+).*service="?(?P<service>[a-zA-Z0-9:_-]+)"?',
+    fields=dict(direction=None, src=0, sport=None, interface_in=1, dst=2, dport=None, interface_out=3, protocol=4, service=5)))
 
 # Compile each regex
 for ret in reTime:
@@ -94,7 +98,7 @@ def get_builtconn(line):
     Returns:
         Dictionary with the following fields:
         [direction, protocol, src, sport, interface_in, dst, dport, interface_out]
-        Contents of each field is a String with extracted data or None if not found.
+        Contents of each field is a String with extracted data, or None if not found.
 
         If unable to extract connection info, None is returned instead of a dict.
     '''
