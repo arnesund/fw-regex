@@ -17,16 +17,17 @@ filenames = glob('test/*.log')
 
 for filename in filenames:
     for line in open(filename):
+        if VERBOSE:
+            print(line.strip())
         # Test get_timestamp()
         res = libfwregex.get_timestamp(line)
         if not res:
             print('get_timestamp: TEST FAILED for line:')
             print(line)
         else:
-            print('get_timestamp: Test OK')
+            print('get_timestamp: Test passed.')
             if VERBOSE:
                 pprint(res)
-                print('')
 
         # Test get_builtconn()
         res = libfwregex.get_builtconn(line)
@@ -34,7 +35,7 @@ for filename in filenames:
             print('get_builtconn: TEST FAILED for line:')
             print(line)
         else:
-            print('get_builtconn: Test OK')
+            print('get_builtconn: Test passed.')
             if VERBOSE:
                 pprint(res)
                 print('')
