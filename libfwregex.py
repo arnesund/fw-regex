@@ -35,6 +35,23 @@ for rec in reConn:
 
 
 def get_timestamp(line):
+    '''Extract syslog timestamp from syslog message.
+
+    Extracts timestamp based on regex matching of several possible
+    timestamp formats.
+
+    Args:
+        line: String, the syslog message to parse
+
+    Returns:
+        Dictionary with the fields [year, month, day, time].
+        Contents of each field is a String with extracted timestamp data.
+
+        Note that "year" field may be None if timestamp does not include
+        that information (which "RSYSLOG_TraditionalFileFormat" does not).
+
+        If unable to extract timestamp, None is returned instead of a dict.
+    '''
     # Only process timestamp
     for ret in reTime:
         matchtime = re.search(ret['regex'], line)
@@ -50,6 +67,21 @@ def get_timestamp(line):
 
 
 def get_builtconn(line):
+    '''Extract connection details from syslog message.
+
+    Extracts connection info based on regex matching of several possible
+    syslog formats used by different types of devices.
+
+    Args:
+        line: String, the syslog message to parse
+
+    Returns:
+        Dictionary with the following fields:
+        [direction, protocol, src, sport, interface_in, dst, dport, interface_out]
+        Contents of each field is a String with extracted data or None if not found.
+
+        If unable to extract connection info, None is returned instead of a dict.
+    '''
     # Initialize return dict
     data = {}
 
