@@ -19,3 +19,15 @@ timestamp formats.
 Note that "year" field may be None if timestamp does not include that information (which "RSYSLOG_TraditionalFileFormat" does not).
 
 If unable to extract timestamp, None is returned instead of a dict.
+
+### get_builtconn(line)
+
+Extracts connection info based on regex matching of several possible syslog formats used by different types of devices.
+
+#### Args:
+ * line: String, the syslog message to parse
+
+#### Returns:
+ * Dictionary with the following fields: [direction, protocol, src, sport, interface_in, dst, dport, interface_out]. Contents of each field is a String with extracted data or None if not found.
+
+If unable to extract connection info, None is returned instead of a dict.
