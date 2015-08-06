@@ -15,6 +15,10 @@ DEBUG = False
 reTime = []
 reTime.append(dict(regex=r'[a-zA-Z]+\s+[0-9]+ (?P<time>[0-9:]+) (?P<month>[a-zA-Z]+) (?P<day>[0-9]+) (?P<year>[0-9]+)', fields=dict(time=0, year=3, month=1, day=2)))
 reTime.append(dict(regex=r'(?P<month>[a-zA-Z]+)\s+(?P<day>[0-9]+) (?P<time>[0-9:]+)', fields=dict(year=None, month=0, day=1, time=2)))
+reTime.append(dict(regex=r'(?P<year>[0-9]+)-(?P<month>[0-9]+)-(?P<day>[0-9]+)T(?P<time>[0-9:.]+)\+(?P<tzinfo>[0-9:]+)', fields=dict(year=0, month=1, day=2, time=3, timezone=4)))
+
+# List of month name abbreviations to convert name to number
+months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 
 # Regular expressions for info in built connection message
 reConn = []
@@ -57,7 +61,16 @@ def get_timestamp(line):
         matchtime = re.search(ret['regex'], line)
         if matchtime:
             # Return dictionary of time-related data
-            return matchtime.groupdict()
+            res = matchtime.groupdict()
+
+            # Make sure day number is two digits
+            if len(res['day']) == 1:
+                res['day'] = res['day'].zfill(2)
+            # Convert month name to number
+            if res['month'] in months:
+                res['month'] = str(months.index(res['month'])+1).zfill(2)
+
+            return res
     else:
         if DEBUG:
             print('ERROR: Unable to decode time format of line: {0}'.format(line))
@@ -71,6 +84,9 @@ def get_builtconn(line):
 
     Extracts connection info based on regex matching of several possible
     syslog formats used by different types of devices.
+
+    Note that this method calls get_timestamp() internally so there is no need
+    to call get_timestamp separately if this method is used.
 
     Args:
         line: String, the syslog message to parse
