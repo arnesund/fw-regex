@@ -11,6 +11,10 @@ import datetime
 # Debug flag
 DEBUG = False
 
+# List of fields in data structures
+timefields = ['year', 'month', 'day', 'time']
+connfields = ['direction', 'protocol', 'src', 'sport', 'interface_in', 'dst', 'dport', 'interface_out']
+
 # Different timestamp formats used
 reTime = []
 reTime.append(dict(regex=r'[a-zA-Z]+\s+[0-9]+ (?P<time>[0-9:]+) (?P<month>[a-zA-Z]+) (?P<day>[0-9]+) (?P<year>[0-9]+)', fields=dict(time=0, year=3, month=1, day=2)))
@@ -74,6 +78,11 @@ def get_timestamp(line):
             if res['month'] in months:
                 res['month'] = str(months.index(res['month'])+1).zfill(2)
 
+            # Set nonexistant fields to None
+            for field in timefields:
+                if field not in res:
+                    res[field] = None
+
             return res
     else:
         if DEBUG:
@@ -124,6 +133,11 @@ def get_builtconn(line):
 
             # Save connection-related data
             data.update(match.groupdict())
+
+            # Set nonexistant fields to None
+            for field in connfields:
+                if field not in data:
+                    data[field] = None
 
             # Match found, so return results
             return data
